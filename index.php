@@ -18,9 +18,9 @@ function pdf_upload_admin_menu() {
 
 // Begin Adding Support Page Content
 function pdfupload_admin_page(){
-    ?>
+?>
     <style>
-    <?php include '../wp-content/plugins/PDF-Uploader/support-files/stylesheet.css'; ?>
+        <?php include '../wp-content/plugins/PDF-Uploader/support-files/stylesheet.css'; ?>
     </style>
     <div class="wrap">
     
@@ -38,42 +38,71 @@ function pdfupload_admin_page(){
         <form action="" method="post" enctype="multipart/form-data">
     <h3>Select image to upload:</h3><br>
     <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload PDF File" name="submit">
+    <input type="submit" value="Upload PDF File" name="submitUpload">
 </form>
 
 <?php
-$target_dir = "../wp-content/plugins/chadpdf/engine/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-if(isset($_POST["submit"])) {
-    if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
-    $uploadOk = 0;
-}
-// Check file size
-if ($_FILES["fileToUpload"]["size"] > 500000) {
-    echo "Sorry, your file is too large.";
-    $uploadOk = 0;
-}
-// Allow certain file formats
-if($imageFileType != "pdf") {
-    echo "Sorry, only PDF files are allowed.";
-    $uploadOk = 0;
-}
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "File uploaded successfully use the following URL when linking to your PDF <br> https://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
-    } else {
-        echo "Sorry, there was an error uploading your file.";
+
+    $target_dir = "../wp-content/plugins/chadpdf/engine/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+
+    if(isset($_POST["submitUpload"])) {
+        if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
     }
-}
-}
-// Check if file already exists
+    // Check file size
+    if ($_FILES["fileToUpload"]["size"] > 500000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+    // Allow certain file formats
+    if($imageFileType != "pdf") {
+        echo "Sorry, only PDF files are allowed.";
+        $uploadOk = 0;
+    }
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "File uploaded successfully use the following URL when linking to your PDF <br> https://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
+    }
+    // Check if file already exists
+
+    /**
+     * FILE DELETION HANDLER
+     * I moved it here as it needs to be above the form   
+     */
+    function delete_file($file) {
+        if(!unlink( get_home_path() . $file  )) {
+            echo "Sorry! your file cannot be deleted. Please try again later";
+        }
+        else {
+            echo "File deleted successfully!";
+        }
+    }
+    if(isset($_POST['submit'])){
+
+        if(!empty($_POST['file'])) { // check if the checkbox was checked.
+            
+            foreach($_POST['file'] as $file) {
+                // call delete function here.
+                delete_file($file);
+            }
+        }
+        else{
+            echo "No file selected. you must select at one file to delete.";
+        }
+    }
+
 
 ?>
 
@@ -85,41 +114,20 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     {
         if ($file != "." && $file != ".." && strtolower(substr($file, strrpos($file, '.') + 1)) == 'pdf')
         {
-            $thelist .= '<tr><td><input type="checkbox" name="file[]"></td><td><a href="http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename='.$file.'" target="_blank" style="font-size:18px;">'.$file.'</a></td></tr>';
+            $thelist .= '<tr><td><input type="checkbox" name="file[]" value="/wp-content/plugins/chadpdf/engine/'.$file.'"></td><td><a href="http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename='.$file.'" target="_blank" style="font-size:18px;">'.$file.'</a></td></tr>';
         }
     }
     closedir($handle);
 }
 ?>
-<form method="post" action="">
+<form id="deletionForm" method="post" action="">
 <table>
-<?=$thelist?>
+    <?=$thelist?>
 </table>
 <input type="submit" name="submit" value="Delete Selection">
 </form>
     </div>
-<?php
-function delete_file($file) {
-        if(!unlink($file)) {
-            echo "Sorry! your file cannot be deleted. Please try again later";
-        }
-        else {
-            echo "File deleted successfully!";
-        }
-}
-if(isset($_POST['submit'])){
-    if(!empty($_POST['file'])) { // check if the checkbox was checked.
-        foreach($_POST['file'] as $file) {
-            // call delete function here.
-            delete_file($file);
-        }
-    }
-    else{
-        echo "No file selected. you must select at one file to delete.";
-    }
-    
-}
-?>
+
     <?php
 }
 // End Adding Secure PDF Upload Page Content
