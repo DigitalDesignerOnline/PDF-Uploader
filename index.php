@@ -77,28 +77,17 @@ function pdfupload_admin_page(){
     }
     // Check if file already exists
 
-
-
-    function url_to_path_test($url){
-        $url=str_replace(rtrim(get_site_url(),'/').'/', ABSPATH, $url);
-        return $url;
-    }
-
     /**
      * FILE DELETION HANDLER
      * I moved it here as it needs to be above the form   
      */
     function delete_file($file) {
-        
         if(!unlink( get_home_path() . $file  )) {
             echo "Sorry! your file cannot be deleted. Please try again later";
         }
         else {
             echo "File deleted successfully!";
         }
-
-        
-            
     }
     if(isset($_POST['submit'])){
 
@@ -136,17 +125,6 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     <?=$thelist?>
 </table>
 <input type="submit" name="submit" value="Delete Selection">
-<script type="text/javascript">
-    (function($){
-        $("#deletionForm").submit(function(){
-            var str = $(this).serialize();
-            $.ajax('delete.php', str, function(result){
-                alert(result);
-            })
-            return(false);
-        });
-    })
-</script>
 </form>
     </div>
 
