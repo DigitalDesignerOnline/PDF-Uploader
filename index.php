@@ -1,7 +1,6 @@
 <?php
 /*
  * Plugin Name: Secure PDF Uploader
- * Plugin URL: http://digitaldesigneronline.com/members/plugins/secure-pdf-uploader/
  * Description: Provides a easy upload interface for the PDF Watermarker plugin.
  * Version: 1.0
  * Author: Chad Warford - Fullstack Developer
@@ -30,7 +29,6 @@ function pdfupload_admin_page(){
 
 		<div style="text-align:center;">
 		
-		<img src="http://digitaldesigneronline.com/wp-content/uploads/2017/06/ddo-logo-3d.png" alt="ibew 353 logo" style="display:block;margin:auto;text-align:center;">
 		<h1>Secure PDF File Upload</h1>
 		<p>Adding a watermark to your PDF files is as easy as uploading the file using the form below.<br>
 		Upon successful submission of your PDF file you will receive the uploaded PDF files URL which you can then use when linking to the PDF within any page or post you desire.</p>
@@ -67,7 +65,7 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "File uploaded successfully use the following URL when linking to your PDF <br> http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
+        echo "File uploaded successfully";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
