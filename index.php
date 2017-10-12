@@ -74,7 +74,7 @@ if ($uploadOk == 0) {
 // Check if file already exists
 
 ?>
-	</div>
+</div>
 
 <?php
 if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
@@ -88,11 +88,12 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     closedir($handle);
 }
 ?>
-
-<table>
-<?=$thelist?>
-</table>
-	</div>
+	<form>
+		<table>
+		<?=$thelist?>
+		</table>
+	</form>
+</div>
 	
 	<?php
 }
