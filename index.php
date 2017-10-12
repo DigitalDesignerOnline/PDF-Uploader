@@ -85,7 +85,7 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     {
         if ($file != "." && $file != ".." && strtolower(substr($file, strrpos($file, '.') + 1)) == 'pdf')
         {
-            $thelist .= '<tr><td><input type="checkbox"></td><td><a href="http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename='.$file.'" target="_blank" style="font-size:18px;">'.$file.'</a></td></tr>';
+            $thelist .= '<tr><td><input type="checkbox" name="file[]"></td><td><a href="http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename='.$file.'" target="_blank" style="font-size:18px;">'.$file.'</a></td></tr>';
         }
     }
     closedir($handle);
@@ -98,7 +98,20 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
 <input type="submit" name="submit" value="Delete Selection">
 </form>
 	</div>
-	
+<?php
+function delete_file($file) {
+        if(!unlink($file)) {
+                echo "Sorry! your file cannot be deleted. Please try again later";
+        }
+        echo "File deleted successfully!";
+}
+if(isset($_POST['submit'])){
+foreach($_GET['file'] as $file){
+    // call delete function here.
+    delete_file($file);
+}
+}
+?>
 	<?php
 }
 // End Adding Secure PDF Upload Page Content
