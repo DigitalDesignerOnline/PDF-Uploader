@@ -12,30 +12,30 @@
 add_action( 'admin_menu', 'pdf_upload_admin_menu' );
 
 function pdf_upload_admin_menu() {
-	add_menu_page( 'Secure PDFs', 'Secure PDF', 'manage_options', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
+    add_menu_page( 'Secure PDFs', 'Secure PDF', 'manage_options', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
 }
 // End Adding Admin Menu Items
 
 // Begin Adding Support Page Content
 function pdfupload_admin_page(){
-	?>
-	<style>
-	<?php include '../wp-content/plugins/PDF-Uploader/support-files/stylesheet.css'; ?>
-	</style>
-	<div class="wrap">
-	
-	<div id="contact">
+    ?>
+    <style>
+    <?php include '../wp-content/plugins/PDF-Uploader/support-files/stylesheet.css'; ?>
+    </style>
+    <div class="wrap">
+    
+    <div id="contact">
 
 
 
-		<div style="text-align:center;">
-		
-		<img src="http://digitaldesigneronline.com/wp-content/uploads/2017/06/ddo-logo-3d.png" alt="logo" style="display:block;margin:auto;text-align:center;">
-		<h1>Secure PDF File Upload</h1>
-		<p>Adding a watermark to your PDF files is as easy as uploading the file using the form below.<br>
-		Upon successful submission of your PDF file you will receive the uploaded PDF files URL which you can then use when linking to the PDF within any page or post you desire.</p>
-		<p>The PDF file when linked to using the URL provided will automatically acquire a watermark when loaded within the browser of the specific logged in user as well as the current date and time.</p>
-		<form action="" method="post" enctype="multipart/form-data">
+        <div style="text-align:center;">
+        
+        <img src="http://digitaldesigneronline.com/wp-content/uploads/2017/06/ddo-logo-3d.png" alt="logo" style="display:block;margin:auto;text-align:center;">
+        <h1>Secure PDF File Upload</h1>
+        <p>Adding a watermark to your PDF files is as easy as uploading the file using the form below.<br>
+        Upon successful submission of your PDF file you will receive the uploaded PDF files URL which you can then use when linking to the PDF within any page or post you desire.</p>
+        <p>The PDF file when linked to using the URL provided will automatically acquire a watermark when loaded within the browser of the specific logged in user as well as the current date and time.</p>
+        <form action="" method="post" enctype="multipart/form-data">
     <h3>Select image to upload:</h3><br>
     <input type="file" name="fileToUpload" id="fileToUpload">
     <input type="submit" value="Upload PDF File" name="submit">
@@ -78,7 +78,7 @@ if ($uploadOk == 0) {
 ?>
 
 
-	</div>
+    </div>
 <?php
 if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     while (false !== ($file = readdir($handle)))
@@ -91,28 +91,36 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     closedir($handle);
 }
 ?>
-<form>
+<form method="post" action="">
 <table>
 <?=$thelist?>
 </table>
 <input type="submit" name="submit" value="Delete Selection">
 </form>
-	</div>
+    </div>
 <?php
 function delete_file($file) {
         if(!unlink($file)) {
-                echo "Sorry! your file cannot be deleted. Please try again later";
+            echo "Sorry! your file cannot be deleted. Please try again later";
         }
-        echo "File deleted successfully!";
+        else {
+            echo "File deleted successfully!";
+        }
 }
 if(isset($_POST['submit'])){
-foreach($_GET['file'] as $file){
-    // call delete function here.
-    delete_file($file);
-}
+    if(!empty($_POST['file'])) { // check if the checkbox was checked.
+        foreach($_POST['file'] as $file) {
+            // call delete function here.
+            delete_file($file);
+        }
+    }
+    else{
+        echo "No file selected. you must select at one file to delete.";
+    }
+    
 }
 ?>
-	<?php
+    <?php
 }
 // End Adding Secure PDF Upload Page Content
 
