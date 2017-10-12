@@ -77,13 +77,6 @@ function pdfupload_admin_page(){
     }
     // Check if file already exists
 
-
-
-    function url_to_path_test($url){
-        $url=str_replace(rtrim(get_site_url(),'/').'/', ABSPATH, $url);
-        return $url;
-    }
-
     /**
      * FILE DELETION HANDLER
      * I moved it here as it needs to be above the form   
