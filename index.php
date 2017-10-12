@@ -1,6 +1,7 @@
 <?php
 /*
  * Plugin Name: Secure PDF Uploader
+ * Plugin URL: http://digitaldesigneronline.com/members/plugins/secure-pdf-uploader/
  * Description: Provides a easy upload interface for the PDF Watermarker plugin.
  * Version: 1.0
  * Author: Chad Warford - Fullstack Developer
@@ -11,7 +12,7 @@
 add_action( 'admin_menu', 'pdf_upload_admin_menu' );
 
 function pdf_upload_admin_menu() {
-	add_menu_page( 'Secure PDFs', 'Secure PDF', 'delete_others_pages', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
+	add_menu_page( 'Secure PDFs', 'Secure PDF', 'manage_options', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
 }
 // End Adding Admin Menu Items
 
@@ -29,6 +30,7 @@ function pdfupload_admin_page(){
 
 		<div style="text-align:center;">
 		
+		<img src="http://digitaldesigneronline.com/wp-content/uploads/2017/06/ddo-logo-3d.png" alt="logo" style="display:block;margin:auto;text-align:center;">
 		<h1>Secure PDF File Upload</h1>
 		<p>Adding a watermark to your PDF files is as easy as uploading the file using the form below.<br>
 		Upon successful submission of your PDF file you will receive the uploaded PDF files URL which you can then use when linking to the PDF within any page or post you desire.</p>
@@ -50,7 +52,7 @@ if(isset($_POST["submit"])) {
     $uploadOk = 0;
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 8000000) {
+if ($_FILES["fileToUpload"]["size"] > 500000) {
     echo "Sorry, your file is too large.";
     $uploadOk = 0;
 }
@@ -65,7 +67,7 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "File uploaded successfully";
+        echo "File uploaded successfully use the following URL when linking to your PDF <br> https://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -74,8 +76,9 @@ if ($uploadOk == 0) {
 // Check if file already exists
 
 ?>
-</div>
 
+
+	</div>
 <?php
 if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     while (false !== ($file = readdir($handle)))
@@ -88,13 +91,15 @@ if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
     closedir($handle);
 }
 ?>
-	<form>
-		<table>
-		<?=$thelist?>
-		</table>
-	</form>
-</div>
+<form>
+<table>
+<?=$thelist?>
+</table>
+<input type="submit" name="submit" value="Delete Selection">
+</form>
+	</div>
 	
 	<?php
 }
-// End Adding Support Page Content
+// End Adding Secure PDF Upload Page Content
+
