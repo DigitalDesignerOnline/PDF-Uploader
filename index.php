@@ -12,7 +12,7 @@
 add_action( 'admin_menu', 'pdf_upload_admin_menu' );
 
 function pdf_upload_admin_menu() {
-	add_menu_page( 'Secure PDFs', 'Secure PDF', 'manage_options', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
+	add_menu_page( 'Secure PDFs', 'Secure PDF', 'delete_others_pages', 'PDF-Uploader/pdfupload.php', 'pdfupload_admin_page', 'dashicons-media-text', 80  );
 }
 // End Adding Admin Menu Items
 
@@ -30,7 +30,7 @@ function pdfupload_admin_page(){
 
 		<div style="text-align:center;">
 		
-		<img src="http://members.local353toronto.com/wp-content/uploads/2017/03/353-LOGO.png" alt="ibew 353 logo" style="display:block;margin:auto;text-align:center;">
+		<img src="http://digitaldesigneronline.com/wp-content/uploads/2017/06/ddo-logo-3d.png" alt="ibew 353 logo" style="display:block;margin:auto;text-align:center;">
 		<h1>Secure PDF File Upload</h1>
 		<p>Adding a watermark to your PDF files is as easy as uploading the file using the form below.<br>
 		Upon successful submission of your PDF file you will receive the uploaded PDF files URL which you can then use when linking to the PDF within any page or post you desire.</p>
@@ -42,7 +42,7 @@ function pdfupload_admin_page(){
 </form>
 
 <?php
-$target_dir = "../wp-content/plugins/pdf-watermarker/engine/";
+$target_dir = "../wp-content/plugins/chadpdf/engine/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -52,7 +52,7 @@ if(isset($_POST["submit"])) {
     $uploadOk = 0;
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 500000) {
+if ($_FILES["fileToUpload"]["size"] > 8000000) {
     echo "Sorry, your file is too large.";
     $uploadOk = 0;
 }
@@ -67,7 +67,7 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "File uploaded successfully use the following URL when linking to your PDF <br> http://members.local353toronto.com/wp-content/plugins/pdf-watermarker/engine/simple.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
+        echo "File uploaded successfully use the following URL when linking to your PDF <br> http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename=" . basename( $_FILES["fileToUpload"]["name"]). "";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -77,6 +77,23 @@ if ($uploadOk == 0) {
 
 ?>
 	</div>
+
+<?php
+if ($handle = opendir('../wp-content/plugins/chadpdf/engine/')) {
+    while (false !== ($file = readdir($handle)))
+    {
+        if ($file != "." && $file != ".." && strtolower(substr($file, strrpos($file, '.') + 1)) == 'pdf')
+        {
+            $thelist .= '<tr><td><input type="checkbox"></td><td><a href="http://digitaldesigneronline.com/wp-content/plugins/chadpdf/engine/simple1.php?filename='.$file.'" target="_blank" style="font-size:18px;">'.$file.'</a></td></tr>';
+        }
+    }
+    closedir($handle);
+}
+?>
+
+<table>
+<?=$thelist?>
+</table>
 	</div>
 	
 	<?php
